@@ -6,19 +6,19 @@ if [ -f /etc/bashrc ]; then
 fi
 
 # User specific aliases and functions
-MITSUHIKOS_DEFAULT_COLOR="[00m"
-MITSUHIKOS_GRAY_COLOR="[37m"
-MITSUHIKOS_PINK_COLOR="[35m"
-MITSUHIKOS_GREEN_COLOR="[32m"
-MITSUHIKOS_ORANGE_COLOR="[33m"
-MITSUHIKOS_RED_COLOR="[31m"
+CUSTOM_DEFAULT_COLOR="[00m"
+CUSTOM_GRAY_COLOR="[37m"
+CUSTOM_PINK_COLOR="[35m"
+CUSTOM_GREEN_COLOR="[32m"
+CUSTOM_ORANGE_COLOR="[33m"
+CUSTOM_RED_COLOR="[31m"
 if [ `id -u` == '0' ]; then
-    MITSUHIKOS_USER_COLOR=$MITSUHIKOS_RED_COLOR
+    CUSTOM_USER_COLOR=$CUSTOM_RED_COLOR
 else
-    MITSUHIKOS_USER_COLOR=$MITSUHIKOS_PINK_COLOR
+    CUSTOM_USER_COLOR=$CUSTOM_PINK_COLOR
 fi
 
-mitsuhikos_virtualenv() {
+check_virtualenv() {
   if [ x$VIRTUAL_ENV != x ]; then
     if [[ $VIRTUAL_ENV == *.virtualenvs/* ]]; then
       ENV_NAME=`basename "${VIRTUAL_ENV}"`
@@ -32,7 +32,7 @@ mitsuhikos_virtualenv() {
   fi
 }
 
-mitsuhikos_lastcommandfailed() {
+check_lastcommandfailed() {
   code=$?
   if [ $code != 0 ]; then
     echo -n $'\033[37m exited \033[31m'
@@ -41,13 +41,13 @@ mitsuhikos_lastcommandfailed() {
   fi
 }
 
-export MITSUHIKOS_BASEPROMPT='\n\e${MITSUHIKOS_USER_COLOR}\u \
-\e${MITSUHIKOS_GRAY_COLOR}at \e${MITSUHIKOS_ORANGE_COLOR}\h \
-\e${MITSUHIKOS_GRAY_COLOR}in \e${MITSUHIKOS_GREEN_COLOR}\w\
-`mitsuhikos_lastcommandfailed`\
-`mitsuhikos_virtualenv`\
-\e${MITSUHIKOS_DEFAULT_COLOR}'
-export PS1="\[\033[G\]${MITSUHIKOS_BASEPROMPT}
+export CUSTOM_BASEPROMPT='\n\e${CUSTOM_USER_COLOR}\u \
+\e${CUSTOM_GRAY_COLOR}at \e${CUSTOM_ORANGE_COLOR}\h \
+\e${CUSTOM_GRAY_COLOR}in \e${CUSTOM_GREEN_COLOR}\w\
+`check_lastcommandfailed`\
+`check_virtualenv`\
+\e${CUSTOM_DEFAULT_COLOR}'
+export PS1="\[\033[G\]${CUSTOM_BASEPROMPT}
 $ "
 
 # don't let virtualenv show prompts by itself
